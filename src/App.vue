@@ -4,17 +4,17 @@ import Header from "./components/Header.vue";
 import Nav from "./components/Nav.vue";
 import { onMounted, ref } from "vue";
 import { useUserStore } from "@/components/assets/stores/userStore";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const router = useRouter();
 const showLoginModal = ref(true);
-const username = ref('');
-const password = ref('');
+const username = ref("");
+const password = ref("");
 
 const handleLogin = () => {
   showLoginModal.value = false;
-  router.push('/');
+  router.push("/");
 };
 
 onMounted(() => {
@@ -32,14 +32,26 @@ onMounted(() => {
 <template>
   <div id="appBody">
     <!-- Login Modal -->
-    <div v-if="showLoginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
+    <div
+      v-if="showLoginModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+    >
+      <div
+        class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden"
+      >
         <div class="p-8">
-          <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-8">Welcome Back</h2>
-          
+          <h2
+            class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-8"
+          >
+            Welcome Back
+          </h2>
+
           <form @submit.prevent="handleLogin" class="space-y-6">
             <div>
-              <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                for="username"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 Username
               </label>
               <input
@@ -51,9 +63,12 @@ onMounted(() => {
                 required
               />
             </div>
-            
+
             <div>
-              <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                for="password"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 Password
               </label>
               <input
@@ -65,7 +80,7 @@ onMounted(() => {
                 required
               />
             </div>
-            
+
             <button
               type="submit"
               class="w-full bg-[#73d622] hover:bg-[#77c520] text-white font-medium py-2 px-4 rounded-md transition duration-200"
@@ -76,7 +91,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    
+
     <div>
       <Header />
     </div>
@@ -91,15 +106,13 @@ onMounted(() => {
 
 <style scoped>
 #appBody {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   overflow: hidden;
 }
 
-.mainContentDiv {
-  overflow: hidden;
+.footer {
+  margin-top: auto;
 }
 </style>
-
-

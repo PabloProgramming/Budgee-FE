@@ -6,9 +6,9 @@ import {
   PLACEHOLDER_GET_CURR_BUDGET,
 } from "@/api/requests";
 import PieChart from "./PieChart.vue";
-import {useColourStore} from "./assets/stores/colourStore";
+import { useColourStore } from "./assets/stores/colourStore";
 
-import {useStore} from "./assets/stores/currentBudgetData";
+import { useStore } from "./assets/stores/currentBudgetData";
 import {
   generateCategoryData,
   generateColorData,
@@ -24,12 +24,12 @@ let colorData = [];
 getColours()
   .then((colorData) => {
     colorData = colorData;
-    colorStore.$patch({colourPalette: colorData});
+    colorStore.$patch({ colourPalette: colorData });
     return PLACEHOLDER_GET_CURR_BUDGET();
   })
   .then((budgetData) => {
-    budgetStore.$patch({budget: budgetData});
-    console.log(budgetData)
+    budgetStore.$patch({ budget: budgetData });
+    console.log(budgetData);
     return getCategories();
   })
   .then((res) => {
@@ -43,17 +43,16 @@ getColours()
     categoryData.forEach((cat) => (cat.confirmed = true));
 
     for (let expense of expensesData) {
-        expense.confirmed = true;
-        const index = category_ids.indexOf(expense.category_id)
-        if (index === -1) {
-            console.warn("no cat found")
-        }
-        else{
-            categoryData[index].expenses.push(expense)
-        }
+      expense.confirmed = true;
+      const index = category_ids.indexOf(expense.category_id);
+      if (index === -1) {
+        console.warn("no cat found");
+      } else {
+        categoryData[index].expenses.push(expense);
+      }
     }
 
-    budgetStore.$patch({categories: categoryData});
+    budgetStore.$patch({ categories: categoryData });
   })
   .then(() => {})
   .catch((err) => {
@@ -63,37 +62,57 @@ getColours()
 
 <template>
   <div id="bodyDiv">
-    <PieChart />
+    <div id="chartContainer">
+      <PieChart />
+    </div>
 
-    <router-view v-slot="{Component}" id="routedComponent">
-      <Transition name="slide" mode="out-in">
-        <component :is="Component" :key="$route.path"></component>
-      </Transition>
-    </router-view>
+    <div id="routerContainer">
+      <router-view v-slot="{ Component }">
+        <Transition name="slide" mode="out-in">
+          <component :is="Component" :key="$route.path" />
+        </Transition>
+      </router-view>
+    </div>
   </div>
 </template>
 
 <style scoped>
 #bodyDiv {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  flex: 1;
+  padding: 1rem;
+  overflow: hidden;
+  gap: 1rem;
 }
-#routedComponent {
-  overflow: scroll;
-  height: 29vh;
-  width: 90%;
-  margin-top: -2.2rem;
+
+#chartContainer {
+  flex: 0 0 auto;
+  margin-top: 1rem;
+}
+
+#routerContainer {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  #bodyDiv {
+    padding: 0.5rem;
+  }
 }
 
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.3s ease-out;
 }
+
 .slide-enter-from,
 .slide-leave-to {
   transform: translateX(50px);
   opacity: 0;
 }
 </style>
-

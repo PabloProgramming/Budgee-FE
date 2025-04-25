@@ -1,10 +1,10 @@
 <script setup>
 import ThemeToggle from "@/components/ThemeToggle.vue";
 import { useUserStore } from "@/components/assets/stores/userStore";
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 
-const userStore = useUserStore()
-const { avatar, username, isLoggedIn } = storeToRefs(userStore)
+const userStore = useUserStore();
+const { avatar, username, isLoggedIn } = storeToRefs(userStore);
 </script>
 
 <template>
@@ -21,26 +21,14 @@ const { avatar, username, isLoggedIn } = storeToRefs(userStore)
     </div>
 
     <div class="logo-title">
-      <img
-        src="../assets/budgee-logo.png"
-        alt="Budgee logo"
-        class="app-logo" />
+      <img src="../assets/budgee-logo.png" alt="Budgee logo" class="app-logo" />
       <h1>Budgee</h1>
     </div>
   </div>
 </template>
 
-
-
-
-
-
-
-
 <style scoped>
 .header {
-  padding: 1rem 1.5rem 2rem;
-  margin-bottom: 2rem;
   transition: background-color 0.3s ease;
 }
 
@@ -48,7 +36,6 @@ const { avatar, username, isLoggedIn } = storeToRefs(userStore)
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
 }
 
 .logo-title {
@@ -89,7 +76,6 @@ const { avatar, username, isLoggedIn } = storeToRefs(userStore)
 }
 
 @media (max-width: 600px) {
-
   .user-avatar {
     width: 2rem;
     height: 2rem;
@@ -99,7 +85,4 @@ const { avatar, username, isLoggedIn } = storeToRefs(userStore)
     font-size: 0.85rem;
   }
 }
-
-
 </style>
-

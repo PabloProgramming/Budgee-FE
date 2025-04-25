@@ -1,9 +1,6 @@
 @import "./base.css";
 @import "tailwindcss";
 
-@import "./base.css";
-@import "tailwindcss";
-
 .footer {
   bottom: 0;
   left: 0;
@@ -99,7 +96,6 @@ a,
 }
 
 @media (max-width: 600px) {
-
   .home-page-button {
     padding: 0.5rem 1.25rem;
   }
@@ -247,7 +243,7 @@ a,
   margin-right: auto;
   font-weight: bolder;
 }
-.addExpenseCard{
+.addExpenseCard {
   padding-right: 5%;
   padding-left: 5%;
   display: grid;
@@ -256,32 +252,30 @@ a,
   text-align: center;
   padding-top: 0.8em;
   padding-bottom: 0.8em;
-  border-radius:10px 10px 10px 10px;
-  font-size:large;
-  width:80%;
-  margin-bottom:1%;
+  border-radius: 10px 10px 10px 10px;
+  font-size: large;
+  width: 80%;
+  margin-bottom: 1%;
   margin-left: auto;
   margin-right: auto;
-  font-weight:bolder
+  font-weight: bolder;
 }
-.addExpenseButton{
-
+.addExpenseButton {
   display: grid;
   margin-top: 10%;
   text-align: center;
   padding-top: 0.8em;
   padding-bottom: 0.8em;
-  border-radius:10px 10px 10px;
-  font-size:large;
-  width:4rem;
-  margin-bottom:1%;
+  border-radius: 10px 10px 10px;
+  font-size: large;
+  width: 4rem;
+  margin-bottom: 1%;
   margin-left: auto;
   margin-right: auto;
-  font-weight:bolder
+  font-weight: bolder;
 }
 
-
-.expenseCard{
+.expenseCard {
   padding-right: 5%;
   padding-left: 5%;
   margin: auto;
@@ -327,4 +321,3 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .theme-dark input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1); /* Inverts the dark calendar icon to white */
 }
-
