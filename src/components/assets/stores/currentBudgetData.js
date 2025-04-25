@@ -54,21 +54,21 @@ export const useStore = defineStore("budgetData", {
         confirmed: false,
       });
     },
-    async addCategory(name, colour) {
-      try {
-        const response = await api.post("/categories", {name, colour});
-        const newCategory = {
-          _id: response.data._id,
-          name,
-          hex_code: color,
-          expenses: [],
-        };
-        this.categories.push(newCategory);
-        return newCategory;
-      } catch (error) {
-        console.error("Failed to create category:", error);
-        throw error;
+    addCategory(name, description, categoryId=this.categories.length, colourId = 301){
+      
+      const newCategory = {
+        _id: categoryId,
+        colour_id: colourId,
+        description,
+        expenses: [],
+        name,
+        confirmed: false,
+        
       }
+      
+      this.categories.push(newCategory)
+      
+      
     },
 
     changeBudget(newTotalBudget) {

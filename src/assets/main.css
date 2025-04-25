@@ -98,6 +98,13 @@ a,
   margin-inline: 2rem;
 }
 
+@media (max-width: 600px) {
+
+  .home-page-button {
+    padding: 0.5rem 1.25rem;
+  }
+}
+
 .home-page-button:hover {
   background-color: #86d021;
   transform: translateY(-2px);
