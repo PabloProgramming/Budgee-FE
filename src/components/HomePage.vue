@@ -1,9 +1,9 @@
 <script setup>
-import {ref, computed} from "vue";
+import { ref, computed } from "vue";
 import "tailwindcss";
-import {useStore} from "./assets/stores/currentBudgetData";
-import {changeHSL} from "@/utils/chartData";
-import {postExpense, modifyBudgets} from "@/api/requests";
+import { useStore } from "./assets/stores/currentBudgetData";
+import { changeHSL } from "@/utils/chartData";
+import { postExpense, modifyBudgets } from "@/api/requests";
 
 const budgetStore = useStore();
 
@@ -169,7 +169,8 @@ const closeCategoryModal = () => {
               type="number"
               min="0"
               step="0.01"
-              placeholder=" " />
+              placeholder=" "
+            />
             <label for="cost" class="custom-label">Cost of Expense</label>
           </div>
 
@@ -179,7 +180,8 @@ const closeCategoryModal = () => {
               name="description"
               v-model="formData.description"
               type="text"
-              placeholder=" " />
+              placeholder=" "
+            />
             <label for="description" class="custom-label">Description</label>
           </div>
 
@@ -189,7 +191,8 @@ const closeCategoryModal = () => {
               class="custom-input"
               type="date"
               v-model="formData.date"
-              :max="new Date().toISOString().split('T')[0]" />
+              :max="new Date().toISOString().split('T')[0]"
+            />
             <label class="custom-label">Date of Expense</label>
           </div>
 
@@ -199,7 +202,8 @@ const closeCategoryModal = () => {
             <button
               type="button"
               @click="openCategoryModal"
-              class="w-full flex justify-between items-center p-2 rounded-md border border-gray-400 bg-white-smoke text-white-900 dark-theme:bg-gray-700 dark-theme:text-white">
+              class="w-full flex justify-between items-center p-2 rounded-md border border-gray-400 bg-white-smoke text-white-900 dark-theme:bg-gray-700 dark-theme:text-white"
+            >
               <span>
                 {{ formData.existingCategory?.item || "Select Category" }}
               </span>
@@ -207,12 +211,14 @@ const closeCategoryModal = () => {
                 class="w-4 h-4 ml-2"
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24">
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M19 9l-7 7-7-7" />
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
           </div>
@@ -222,14 +228,18 @@ const closeCategoryModal = () => {
             <div
               v-if="showCategoryModal"
               class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1e1e1e] bg-opacity-80"
-              @click.self="closeCategoryModal">
+              @click.self="closeCategoryModal"
+            >
               <div
-                class="w-full max-w-md max-h-[80vh] overflow-y-auto bg-[#f8f8f8] dark-theme:bg-gray-900 rounded-lg shadow-xl transform transition-all">
+                class="w-full max-w-md max-h-[80vh] overflow-y-auto bg-[#f8f8f8] dark-theme:bg-gray-900 rounded-lg shadow-xl transform transition-all"
+              >
                 <!-- Modal Header -->
                 <div
-                  class="p-4 border-b border-gray-200 dark-theme:border-gray-600">
+                  class="p-4 border-b border-gray-200 dark-theme:border-gray-600"
+                >
                   <h3
-                    class="text-lg font-medium text-gray-900 dark-theme:text-white">
+                    class="text-lg font-medium text-gray-900 dark-theme:text-white"
+                  >
                     Select a Category
                   </h3>
                 </div>
@@ -249,7 +259,8 @@ const closeCategoryModal = () => {
                         l: 85,
                       }),
                       borderLeft: `4px solid ${category.hex_code}`,
-                    }">
+                    }"
+                  >
                     <span class="font-medium">
                       {{ category.name }}
                     </span>
@@ -258,10 +269,12 @@ const closeCategoryModal = () => {
 
                 <!-- Modal Footer with Cancel Button -->
                 <div
-                  class="p-4 border-t border-gray-200 dark-theme:border-gray-700 flex justify-end">
+                  class="p-4 border-t border-gray-200 dark-theme:border-gray-700 flex justify-end"
+                >
                   <button
                     @click="closeCategoryModal"
-                    class="px-4 py-2 text-gray-700 dark-theme:text-gray-300 hover:text-gray-900 dark-theme:hover:text-white focus:outline-none transition-colors">
+                    class="px-4 py-2 text-gray-700 dark-theme:text-gray-300 hover:text-gray-900 dark-theme:hover:text-white focus:outline-none transition-colors"
+                  >
                     Cancel
                   </button>
                 </div>
@@ -273,7 +286,8 @@ const closeCategoryModal = () => {
           <button
             type="button"
             class="home-page-button mt-4"
-            @click.prevent="addNewExpense">
+            @click.prevent="addNewExpense"
+          >
             Save
           </button>
         </form>
@@ -290,14 +304,16 @@ const closeCategoryModal = () => {
               min="0"
               step="0.01"
               required
-              placeholder=" " />
+              placeholder=" "
+            />
             <label class="custom-label">New Total Budget</label>
           </div>
           <button
             type="button"
             class="home-page-button"
             @click.prevent="updateTotalBudget"
-            :disabled="!formData.newTotalBudget">
+            :disabled="!formData.newTotalBudget"
+          >
             Save
           </button>
         </form>
@@ -305,9 +321,11 @@ const closeCategoryModal = () => {
 
       <div
         v-if="optimisticMessage"
-        class="fixed inset-x-0 bottom-[20%] flex justify-center z-[1000]">
+        class="fixed inset-x-0 bottom-[20%] flex justify-center z-[1000]"
+      >
         <p
-          class="text-[#73d622] text-xl md:text-2xl font-bold px-8 py-4 rounded-lg border border-transparent animate-[fadeOut_2s_ease-in-out_forwards] dark-theme:bg-black dark-theme:text-[#8aff33] dark-theme:shadow-lg dark-theme:border-[#73d622]/30">
+          class="text-[#73d622] text-xl md:text-2xl font-bold px-8 py-4 rounded-lg border border-transparent animate-[fadeOut_2s_ease-in-out_forwards] dark-theme:bg-black dark-theme:text-[#8aff33] dark-theme:shadow-lg dark-theme:border-[#73d622]/30"
+        >
           {{ optimisticMessage }}
         </p>
       </div>
@@ -348,4 +366,3 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 </style>
-
