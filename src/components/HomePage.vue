@@ -146,223 +146,234 @@ const closeCategoryModal = () => {
 </script>
 
 <template>
-  <div>
-    <section>
-      <div class="home-page-buttons">
-        <button class="home-page-button" @click="showExpenseForm">
-          Add Expense
-        </button>
-        <button class="home-page-button" @click="showChangeBudgetForm">
-          Change budget
-        </button>
-      </div>
+  <div class="home-container">
+    <div class="home-page-buttons">
+      <button class="home-page-button" @click="showExpenseForm">
+        Add Expense
+      </button>
+      <button class="home-page-button" @click="showChangeBudgetForm">
+        Change budget
+      </button>
+    </div>
 
-      <!-- Expense Form -->
-      <div class="form-scroll-container" v-if="formData.expenseForm">
-        <form class="form" @submit.prevent>
-          <!-- Cost -->
-          <div class="form-div relative">
-            <input
-              class="custom-input"
-              name="cost"
-              v-model.number="formData.costOfExpense"
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder=" "
-            />
-            <label for="cost" class="custom-label">Cost of Expense</label>
-          </div>
+    <!-- Expense Form -->
+    <div class="form-scroll-container" v-if="formData.expenseForm">
+      <form class="responsive-form" @submit.prevent>
+        <!-- Cost -->
+        <div class="form-div relative">
+          <input
+            class="custom-input"
+            name="cost"
+            v-model.number="formData.costOfExpense"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder=" "
+          />
+          <label for="cost" class="custom-label">Cost of Expense</label>
+        </div>
 
-          <div class="form-div relative">
-            <input
-              class="custom-input"
-              name="description"
-              v-model="formData.description"
-              type="text"
-              placeholder=" "
-            />
-            <label for="description" class="custom-label">Description</label>
-          </div>
+        <div class="form-div relative">
+          <input
+            class="custom-input"
+            name="description"
+            v-model="formData.description"
+            type="text"
+            placeholder=" "
+          />
+          <label for="description" class="custom-label">Description</label>
+        </div>
 
-          <!-- Date -->
-          <div class="form-div relative">
-            <input
-              class="custom-input"
-              type="date"
-              v-model="formData.date"
-              :max="new Date().toISOString().split('T')[0]"
-            />
-            <label class="custom-label">Date of Expense</label>
-          </div>
+        <!-- Date -->
+        <div class="form-div relative">
+          <input
+            class="custom-input"
+            type="date"
+            v-model="formData.date"
+            :max="new Date().toISOString().split('T')[0]"
+          />
+          <label class="custom-label">Date of Expense</label>
+        </div>
 
-          <!-- Existing Category -->
-          <div class="form-div">
-            <!-- Category Selection Button - Optimized Version -->
-            <button
-              type="button"
-              @click="openCategoryModal"
-              class="w-full flex justify-between items-center p-2 rounded-md border border-gray-400 bg-white-smoke text-white-900 dark-theme:bg-gray-700 dark-theme:text-white"
+        <!-- Existing Category -->
+        <div class="form-div">
+          <!-- Category Selection Button - Optimized Version -->
+          <button
+            type="button"
+            @click="openCategoryModal"
+            class="w-full flex justify-between items-center p-2 rounded-md border border-gray-400 bg-white-smoke text-white-900 dark-theme:bg-gray-700 dark-theme:text-white"
+          >
+            <span>
+              {{ formData.existingCategory?.item || "Select Category" }}
+            </span>
+            <svg
+              class="w-4 h-4 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <span>
-                {{ formData.existingCategory?.item || "Select Category" }}
-              </span>
-              <svg
-                class="w-4 h-4 ml-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-          </div>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+        </div>
 
-          <!-- Category Selection Modal -->
-          <transition name="fade">
+        <!-- Category Selection Modal -->
+        <transition name="fade">
+          <div
+            v-if="showCategoryModal"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1e1e1e] bg-opacity-80"
+            @click.self="closeCategoryModal"
+          >
             <div
-              v-if="showCategoryModal"
-              class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1e1e1e] bg-opacity-80"
-              @click.self="closeCategoryModal"
+              class="w-full max-w-md max-h-[80vh] overflow-y-auto bg-[#f8f8f8] dark-theme:bg-gray-900 rounded-lg shadow-xl transform transition-all"
             >
+              <!-- Modal Header -->
               <div
-                class="w-full max-w-md max-h-[80vh] overflow-y-auto bg-[#f8f8f8] dark-theme:bg-gray-900 rounded-lg shadow-xl transform transition-all"
+                class="p-4 border-b border-gray-200 dark-theme:border-gray-600"
               >
-                <!-- Modal Header -->
-                <div
-                  class="p-4 border-b border-gray-200 dark-theme:border-gray-600"
+                <h3
+                  class="text-lg font-medium text-gray-900 dark-theme:text-white"
                 >
-                  <h3
-                    class="text-lg font-medium text-gray-900 dark-theme:text-white"
-                  >
-                    Select a Category
-                  </h3>
-                </div>
-                <!-- Modal Body (Categories List) -->
-                <div class="p-4 space-y-2">
-                  <div
-                    v-for="(category, index) in categories"
-                    :key="index"
-                    @click="
-                      selectCategory(index, category.name, category.hex_code);
-                      closeCategoryModal();
-                    "
-                    class="px-4 py-3 rounded-md cursor-pointer hover:bg-gray-100 dark-theme:hover:bg-gray-700 text-gray-800 dark-theme:text-white transition-colors"
-                    :style="{
-                      backgroundColor: changeHSL(colours[index], {
-                        s: 100,
-                        l: 85,
-                      }),
-                      borderLeft: `4px solid ${category.hex_code}`,
-                    }"
-                  >
-                    <span class="font-medium">
-                      {{ category.name }}
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Modal Footer with Cancel Button -->
+                  Select a Category
+                </h3>
+              </div>
+              <!-- Modal Body (Categories List) -->
+              <div class="p-4 space-y-2">
                 <div
-                  class="p-4 border-t border-gray-200 dark-theme:border-gray-700 flex justify-end"
+                  v-for="(category, index) in categories"
+                  :key="index"
+                  @click="
+                    selectCategory(index, category.name, category.hex_code);
+                    closeCategoryModal();
+                  "
+                  class="px-4 py-3 rounded-md cursor-pointer hover:bg-gray-100 dark-theme:hover:bg-gray-700 text-gray-800 dark-theme:text-white transition-colors"
+                  :style="{
+                    backgroundColor: changeHSL(colours[index], {
+                      s: 100,
+                      l: 85,
+                    }),
+                    borderLeft: `4px solid ${category.hex_code}`,
+                  }"
                 >
-                  <button
-                    @click="closeCategoryModal"
-                    class="px-4 py-2 text-gray-700 dark-theme:text-gray-300 hover:text-gray-900 dark-theme:hover:text-white focus:outline-none transition-colors"
-                  >
-                    Cancel
-                  </button>
+                  <span class="font-medium">
+                    {{ category.name }}
+                  </span>
                 </div>
               </div>
+
+              <!-- Modal Footer with Cancel Button -->
+              <div
+                class="p-4 border-t border-gray-200 dark-theme:border-gray-700 flex justify-end"
+              >
+                <button
+                  @click="closeCategoryModal"
+                  class="px-4 py-2 text-gray-700 dark-theme:text-gray-300 hover:text-gray-900 dark-theme:hover:text-white focus:outline-none transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-          </transition>
-
-          <!-- Save Button -->
-          <button
-            type="button"
-            class="home-page-button mt-4"
-            @click.prevent="addNewExpense"
-          >
-            Save
-          </button>
-        </form>
-      </div>
-
-      <!-- Budget Form -->
-      <div class="form-scroll-container" v-if="formData.budgetForm">
-        <form class="form" @submit.prevent>
-          <div class="form-div relative">
-            <input
-              class="custom-input"
-              v-model.number="formData.newTotalBudget"
-              type="number"
-              min="0"
-              step="0.01"
-              required
-              placeholder=" "
-            />
-            <label class="custom-label">New Total Budget</label>
           </div>
-          <button
-            type="button"
-            class="home-page-button"
-            @click.prevent="updateTotalBudget"
-            :disabled="!formData.newTotalBudget"
-          >
-            Save
-          </button>
-        </form>
-      </div>
+        </transition>
 
-      <div
-        v-if="optimisticMessage"
-        class="fixed inset-x-0 bottom-[20%] flex justify-center z-[1000]"
-      >
-        <p
-          class="text-[#73d622] text-xl md:text-2xl font-bold px-8 py-4 rounded-lg border border-transparent animate-[fadeOut_2s_ease-in-out_forwards] dark-theme:bg-black dark-theme:text-[#8aff33] dark-theme:shadow-lg dark-theme:border-[#73d622]/30"
+        <!-- Save Button -->
+        <button
+          type="button"
+          class="home-page-button mt-4"
+          @click.prevent="addNewExpense"
         >
-          {{ optimisticMessage }}
-        </p>
-      </div>
-    </section>
+          Save
+        </button>
+      </form>
+    </div>
+
+    <!-- Budget Form -->
+    <div class="form-scroll-container" v-if="formData.budgetForm">
+      <form class="responsive-form" @submit.prevent>
+        <div class="form-div relative">
+          <input
+            class="custom-input"
+            v-model.number="formData.newTotalBudget"
+            type="number"
+            min="0"
+            step="0.01"
+            required
+            placeholder=" "
+          />
+          <label class="custom-label">New Total Budget</label>
+        </div>
+        <button
+          type="button"
+          class="home-page-button"
+          @click.prevent="updateTotalBudget"
+          :disabled="!formData.newTotalBudget"
+        >
+          Save
+        </button>
+      </form>
+    </div>
+
+    <div
+      v-if="optimisticMessage"
+      class="fixed inset-x-0 bottom-[20%] flex justify-center z-[1000]"
+    >
+      <p
+        class="text-[#73d622] text-xl md:text-2xl font-bold px-8 py-4 rounded-lg border border-transparent animate-[fadeOut_2s_ease-in-out_forwards] dark-theme:bg-black dark-theme:text-[#8aff33] dark-theme:shadow-lg dark-theme:border-[#73d622]/30"
+      >
+        {{ optimisticMessage }}
+      </p>
+    </div>
   </div>
 </template>
 
 <style scoped>
-@import "tailwindcss";
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.home-container {
+  padding: 1rem;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.home-page-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
+@media (min-width: 640px) {
+  .home-page-buttons {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-  70% {
-    opacity: 1;
-    transform: translateY(0);
+}
+
+@media (min-width: 640px) {
+  .home-page-button {
+    width: auto;
+    min-width: 200px;
   }
-  100% {
-    opacity: 0;
-    transform: translateY(-20px);
+}
+
+.responsive-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.form-div {
+  width: 100%;
+}
+
+/* ... existing form input styles ... */
+
+@media (min-width: 768px) {
+  .responsive-form {
+    padding: 1.5rem;
   }
 }
 </style>

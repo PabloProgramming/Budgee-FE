@@ -91,16 +91,13 @@ onMounted(() => {
         </div>
       </div>
     </div>
-
     <div>
       <Header />
     </div>
     <div class="mainContentDiv">
       <Body />
     </div>
-    <footer class="footer">
-      <Nav></Nav>
-    </footer>
+    <Nav></Nav>
   </div>
 </template>
 
@@ -109,10 +106,17 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow: hidden;
+  padding-bottom: 4.5rem;
 }
 
-.footer {
-  margin-top: auto;
+.mainContentDiv {
+  flex: 1;
+  padding-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  #appBody {
+    padding-bottom: 0;
+  }
 }
 </style>
