@@ -112,8 +112,6 @@ a,
 }
 
 .form-scroll-container {
-  max-height: 24rem;
-  overflow-y: auto;
   padding: 1rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
