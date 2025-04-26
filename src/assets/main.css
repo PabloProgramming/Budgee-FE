@@ -77,38 +77,45 @@ a,
 .home-page-buttons {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
-  margin-top: 2rem;
+  gap: 1.5rem;
+  margin-top: 3rem;
 }
 
 .home-page-button {
   background-color: #73d622;
   color: #1a1a1a;
   font-weight: 600;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   border: none;
   border-radius: 2rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 1rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  font-size: 1.1rem;
   cursor: pointer;
-  margin-inline: 2rem;
-}
-
-@media (max-width: 600px) {
-  .home-page-button {
-    padding: 0.5rem 1.25rem;
-  }
 }
 
 .home-page-button:hover {
   background-color: #86d021;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 .home-page-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 600px) {
+  .home-page-buttons {
+    gap: 1rem;
+  }
+  .home-page-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
 }
 
 .form-scroll-container {
