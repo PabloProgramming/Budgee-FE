@@ -38,10 +38,9 @@ import { RouterLink } from "vue-router";
           class="nav-icon"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          aria-hidden="true"
         >
           <path
+            fill="currentColor"
             d="M8.597 3.2A1 1 0 0 0 7.04 4.289a3.49 3.49 0 0 1 .057 1.795 3.448 3.448 0 0 1-.84 1.575.999.999 0 0 0-.077.094c-.596.817-3.96 5.6-.941 10.762l.03.049a7.73 7.73 0 0 0 2.917 2.602 7.617 7.617 0 0 0 3.772.829 8.06 8.06 0 0 0 3.986-.975 8.185 8.185 0 0 0 3.04-2.864c1.301-2.2 1.184-4.556.588-6.441-.583-1.848-1.68-3.414-2.607-4.102a1 1 0 0 0-1.594.757c-.067 1.431-.363 2.551-.794 3.431-.222-2.407-1.127-4.196-2.224-5.524-1.147-1.39-2.564-2.3-3.323-2.788a8.487 8.487 0 0 1-.432-.287Z"
           />
         </svg>
@@ -58,10 +57,28 @@ import { RouterLink } from "vue-router";
   left: 0;
   right: 0;
   background-color: #f9f9f9;
-  border-top: solid 1px #73d622;
+  border-top: 1px solid #e0e0e0;
   border-radius: 0.5rem;
   z-index: 1000;
   padding: 0.5rem 0;
+}
+
+.bottom-nav::before {
+  background: #73d622;
+}
+
+.bottom-nav:hover::before {
+  opacity: 1;
+}
+
+.theme-dark .bottom-nav {
+  background-color: #1e1e1e;
+  border-top: 1px solid #73d622;
+}
+
+.theme-dark .nav-item.active {
+  color: #8aff33;
+  background-color: rgba(138, 255, 51, 0.1); /* subtle active background */
 }
 
 .nav-container {
@@ -94,7 +111,6 @@ import { RouterLink } from "vue-router";
 .nav-icon {
   width: 1.5rem;
   height: 1.5rem;
-  margin-bottom: 0.25rem;
 }
 
 .nav-label {
