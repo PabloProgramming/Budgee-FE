@@ -7,7 +7,7 @@
         <div class="card-header">
           <h3>{{ goal.name }}</h3>
           <span class="amount-saved"
-            >${{ goal.saved }} of ${{ goal.target }}</span
+            >£{{ goal.saved }} of £{{ goal.target }}</span
           >
         </div>
         <div class="progress-bar">

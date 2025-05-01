@@ -86,8 +86,12 @@ const CustomChart = createTypedChart("customDoughnut", Custom);
 }
 
 .initial-budget {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: bold;
+}
+
+.remaining-budget {
+  font-size: 0.75rem;
 }
 
 .remaining-budget.positive {
@@ -100,11 +104,11 @@ const CustomChart = createTypedChart("customDoughnut", Custom);
 
 @media (max-width: 640px) {
   .initial-budget {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .remaining-budget {
-    font-size: 0.8rem;
+    font-size: 0.65rem;
   }
 }
 </style>

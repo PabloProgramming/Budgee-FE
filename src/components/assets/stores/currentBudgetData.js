@@ -1,5 +1,5 @@
-import {defineStore, storeToRefs} from "pinia";
-import {useColourStore} from "./colourStore";
+import { defineStore, storeToRefs } from "pinia";
+import { useColourStore } from "./colourStore";
 
 export const useStore = defineStore("budgetData", {
   state: () => {
@@ -8,7 +8,7 @@ export const useStore = defineStore("budgetData", {
       budget: {
         _id: 1,
         budget: 0,
-        interval: {start_date: new Date(), end_date: new Date()},
+        interval: { start_date: new Date(), end_date: new Date() },
       },
     };
   },
@@ -54,8 +54,26 @@ export const useStore = defineStore("budgetData", {
         confirmed: false,
       });
     },
-    addCategory(name, description, categoryId=this.categories.length, colourId = 301){
-      
+    removeExpense(expenseId) {
+      for (let cat of this.categories) {
+        const expenseIndex = cat.expenses.findIndex(
+          (expense) => expense._id === expenseId
+        );
+        if (expenseIndex !== -1) {
+          const expenseAmount = cat.expenses[expenseIndex].amount;
+          cat.expenses.splice(expenseIndex, 1);
+          this.budget.budget -= expenseAmount;
+          this.$patch();
+          break;
+        }
+      }
+    },
+    addCategory(
+      name,
+      description,
+      categoryId = this.categories.length,
+      colourId = 301
+    ) {
       const newCategory = {
         _id: categoryId,
         colour_id: colourId,
@@ -63,23 +81,20 @@ export const useStore = defineStore("budgetData", {
         expenses: [],
         name,
         confirmed: false,
-        
-      }
-      
-      this.categories.push(newCategory)
-      
-      
+      };
+
+      this.categories.push(newCategory);
     },
 
     changeBudget(newTotalBudget) {
-      this.$patch({budget: {budget: newTotalBudget}});
+      this.$patch({ budget: { budget: newTotalBudget } });
     },
   },
   getters: {
     getCategories: (state) => {
       let colorStore = useColourStore();
       const newCategories = state.categories.map((cat) => {
-        const newCat = {...cat};
+        const newCat = { ...cat };
         newCat.amount =
           Math.round(
             100 *
@@ -173,4 +188,3 @@ export const useStore = defineStore("budgetData", {
     },
   },
 });
-
