@@ -41,17 +41,16 @@ async function startAdding() {
 
 const expensesShown = computed(() => {
   const categoryId = router.currentRoute.value.params.category_id;
-
   const foundCategory = budgetStore.categories.find(
     (cat) => cat._id === categoryId
   );
 
   if (!foundCategory) return [];
 
+  // Sort expenses by date
   return [...foundCategory.expenses].sort((a, b) => {
     const dateDiff = new Date(b.date) - new Date(a.date);
-    if (dateDiff !== 0) return dateDiff;
-    return b._id.localeCompare(a._id);
+    return dateDiff !== 0 ? dateDiff : b._id.localeCompare(a._id);
   });
 });
 
@@ -62,8 +61,7 @@ const styleObject = reactive({
   "border-color": changeHSL("#222222"),
   "border-width": "2px",
 });
-
-function confirmAddExpense() {
+async function confirmAddExpense() {
   validateAmount({ type: "validate" });
   validateReference();
 
@@ -80,27 +78,42 @@ function confirmAddExpense() {
     newExpenseRefError.value = false;
     isAdding.value = false;
 
-    const tempID = String(Math.round(Math.random() * 10 ** 10));
+    try {
+      const savedExpense = await postExpense(
+        date,
+        refAmount,
+        description,
+        categoryId,
+        budgetId
+      );
 
-    const expense = {
-      _id: tempID,
-      amount: refAmount,
-      description,
-      categoryId,
-      budgetId,
-      date,
-      confirmed: true,
-    };
-
-    budgetStore.addExpense(expense);
-
-    return postExpense(date, refAmount, description, categoryId, budgetId)
-      .then(() => {
-        budgetStore.confirmExpense(tempID);
-      })
-      .catch((err) => {
-        console.log("Error posting expense:", err);
+      budgetStore.addExpense({
+        ...savedExpense,
+        confirmed: true,
       });
+    } catch (err) {
+      console.log("Error posting expense:", err);
+    }
+  } else {
+    // Trigger the shake animation when validation fails
+    if (newExpenseRefError.value) {
+      document
+        .getElementById("addExpenseReferenceInput")
+        .classList.add("shake");
+      setTimeout(() => {
+        document
+          .getElementById("addExpenseReferenceInput")
+          .classList.remove("shake");
+      }, 500);
+    }
+    if (newExpenseAmountError.value) {
+      document.getElementById("addExpenseAmountInput").classList.add("shake");
+      setTimeout(() => {
+        document
+          .getElementById("addExpenseAmountInput")
+          .classList.remove("shake");
+      }, 500);
+    }
   }
 }
 
@@ -156,23 +169,20 @@ async function validateAmount(event) {
 
       <div v-if="isAdding" class="addExpenseCard" :style="styleObject">
         <input
-          :class="newExpenseRefError ? 'error-input' : ''"
+          :class="newExpenseRefError ? 'error-border' : ''"
           v-model="newExpenseName"
-          @keyup.enter="handleCompleteReference"
           @blur="validateReference($event)"
           placeholder="Reference"
           id="addExpenseReferenceInput"
         />
         <input
-          :class="newExpenseAmountError ? 'error-input' : ''"
+          :class="newExpenseAmountError ? 'error-border' : ''"
           v-model="newExpenseAmount"
-          @keyup.enter="confirmAddExpense"
-          @focus="validateAmount($event)"
           @blur="validateAmount($event)"
           placeholder=" Amount (£)"
           id="addExpenseAmountInput"
         />
-        <button @click="confirmAddExpense">Save</button>
+        <button @click="confirmAddExpense" class="saveButton">Save</button>
       </div>
 
       <div>
@@ -188,27 +198,61 @@ async function validateAmount(event) {
 </template>
 
 <style scoped>
-#addExpenseReferenceInput {
-  text-align: center;
-  width: 80%;
-  align-items: center;
-  margin: auto;
-  outline: none;
-}
-
+#addExpenseReferenceInput,
 #addExpenseAmountInput {
   text-align: center;
   width: 80%;
   align-items: center;
   margin: auto;
   outline: none;
+  border: 2px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, border-width 0.3s ease;
 }
 
-.error-input {
-  background-color: #ff6b6b;
+.addExpenseButton:hover {
+  background-color: #86d021;
+  transform: scale(1.08);
 }
+
+.addExpenseButton:active {
+  transform: scale(1);
+}
+
+.error-border {
+  border-color: #ff4757 !important;
+  background-color: #fff6f6;
+  animation: shake 0.5s ease;
+}
+
 .singleCatDivBox {
   display: grid;
   grid-template-columns: 8fr 1fr;
+}
+
+.saveButton {
+  background-color: #86d021;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.saveButton:hover {
+  background-color: #74b719;
+  transform: scale(1.05);
+}
+
+.saveButton:active {
+  background-color: #64a113;
+}
+
+.saveButton:disabled {
+  background-color: #c7e8a3;
+  cursor: not-allowed;
 }
 </style>

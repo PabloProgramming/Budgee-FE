@@ -26,31 +26,31 @@ export const useStore = defineStore("budgetData", {
         }
       }
     },
-    confirmExpense(tempID) {
-      for (let cat of this.categories) {
-        cat.expenses.forEach((expense) => console.log(expense._id));
-        console.log(
-          cat.expenses.find((expense) => expense._id == tempID) || {}
-        );
-        (
-          cat.expenses.find((expense) => expense._id == tempID) || {}
-        ).confirmed = true;
+    confirmExpense(tempID, category_id) {
+      const cat = this.categories.find((c) => c._id === category_id);
+      if (!cat) return;
+
+      const exp = cat.expenses.find((expense) => expense._id === tempID);
+      if (exp) {
+        exp.confirmed = true;
       }
     },
-    addExpense(amount, categoryId, budgetId, date, description, expenseId) {
-      const category = this.categories.find((cat) => cat._id === categoryId);
+    addExpense(expense) {
+      const category = this.categories.find(
+        (cat) => cat._id === expense.category_id
+      );
       if (!category) {
-        console.error(`Category ${categoryId} not found!`);
+        console.error(`Category ${expense.category_id} not found!`);
         return false;
       }
 
       category.expenses.push({
-        _id: expenseId,
-        amount,
-        budget_id: budgetId,
-        category_id: categoryId,
-        date,
-        description,
+        _id: expense._id,
+        amount: expense.amount,
+        budget_id: expense.budget_id,
+        category_id: expense.category_id,
+        date: expense.date,
+        description: expense.description,
         confirmed: false,
       });
     },
@@ -60,10 +60,7 @@ export const useStore = defineStore("budgetData", {
           (expense) => expense._id === expenseId
         );
         if (expenseIndex !== -1) {
-          const expenseAmount = cat.expenses[expenseIndex].amount;
           cat.expenses.splice(expenseIndex, 1);
-          this.budget.budget -= expenseAmount;
-          this.$patch();
           break;
         }
       }
