@@ -21,9 +21,7 @@ const getInitialData = () => ({
 
 const categories = computed(() => budgetStore.categories);
 const colours = computed(() =>
-  budgetStore.getCategories.map((cat) => {
-    return cat.hex_code;
-  })
+  budgetStore.getCategories.map((cat) => cat.hex_code)
 );
 
 const formData = ref(getInitialData());
@@ -56,30 +54,30 @@ const showExpenseForm = () => {
   formData.value.expenseForm = !formData.value.expenseForm;
 };
 
+const showOptimisticMessage = (message) => {
+  optimisticMessage.value = message;
+  setTimeout(() => {
+    optimisticMessage.value = "";
+  }, 1500);
+};
+
 const updateTotalBudget = async () => {
   const value = Number(formData.value.newTotalBudget);
   if (!isNaN(value) && value >= 0) {
     try {
       const updatedBudget = await modifyBudgets(budgetStore.budget._id, value);
-
       budgetStore.changeBudget(value);
-
       formData.value.newTotalBudget = "";
       showChangeBudgetForm();
-
-      optimisticMessage.value = `Budget successfully updated to £${value}!`;
+      showOptimisticMessage(`Budget successfully updated to £${value}`);
     } catch (error) {
       console.error(
         "Failed to update budget:",
         error.response?.data || error.message
       );
-      optimisticMessage.value = "Failed to update budget. Please try again.";
+      showOptimisticMessage("Failed to update budget. Please try again.");
     }
   }
-};
-
-const addCategory = (newCategory, categoryColor) => {
-  budgetStore.addCategory(newCategory, categoryColor);
 };
 
 const addNewExpense = async () => {
@@ -100,7 +98,7 @@ const addNewExpense = async () => {
     categoryId = formData.value.existingCategory.key;
     categoryName = formData.value.existingCategory.item;
   } else {
-    optimisticMessage.value = "Please select or create a category.";
+    showOptimisticMessage("Please select or create a category.");
     return;
   }
 
@@ -122,15 +120,15 @@ const addNewExpense = async () => {
       expenseAdded._id
     );
 
-    optimisticMessage.value = `£${cost} successfully added to ${categoryName}!`;
     showExpenseForm();
     formData.value = getInitialData();
+    showOptimisticMessage(`£${cost} successfully added to ${categoryName}`);
   } catch (error) {
     console.error(
       "Failed to save expense:",
       error.response?.data || error.message
     );
-    optimisticMessage.value = "Failed to save expense. Please try again.";
+    showOptimisticMessage("Failed to save expense. Please try again.");
   }
 };
 
@@ -156,10 +154,23 @@ const closeCategoryModal = () => {
       </button>
     </div>
 
+    <!-- Optimistic Message -->
+    <transition name="fade">
+      <div v-if="optimisticMessage" class="mt-10 flex justify-center">
+        <p
+          :class="[
+            'optimistic-message',
+            optimisticMessage.includes('Failed') ? 'error' : 'success',
+          ]"
+        >
+          {{ optimisticMessage }}
+        </p>
+      </div>
+    </transition>
+
     <!-- Expense Form -->
     <div class="form-scroll-container" v-if="formData.expenseForm">
       <form class="responsive-form" @submit.prevent>
-        <!-- Cost -->
         <div class="form-div relative">
           <input
             class="custom-input"
@@ -184,7 +195,6 @@ const closeCategoryModal = () => {
           <label for="description" class="custom-label">Description</label>
         </div>
 
-        <!-- Date -->
         <div class="form-div relative">
           <input
             class="custom-input"
@@ -195,9 +205,7 @@ const closeCategoryModal = () => {
           <label class="custom-label">Date of Expense</label>
         </div>
 
-        <!-- Existing Category -->
         <div class="form-div">
-          <!-- Category Selection Button - Optimized Version -->
           <button
             type="button"
             @click="openCategoryModal"
@@ -222,7 +230,6 @@ const closeCategoryModal = () => {
           </button>
         </div>
 
-        <!-- Category Selection Modal -->
         <transition name="fade">
           <div
             v-if="showCategoryModal"
@@ -232,7 +239,6 @@ const closeCategoryModal = () => {
             <div
               class="w-full max-w-md max-h-[80vh] overflow-y-auto bg-[#f8f8f8] dark-theme:bg-gray-900 rounded-lg shadow-xl transform transition-all"
             >
-              <!-- Modal Header -->
               <div
                 class="p-4 border-b border-gray-200 dark-theme:border-gray-600"
               >
@@ -242,7 +248,6 @@ const closeCategoryModal = () => {
                   Select a Category
                 </h3>
               </div>
-              <!-- Modal Body (Categories List) -->
               <div class="p-4 space-y-2">
                 <div
                   v-for="(category, index) in categories"
@@ -260,13 +265,9 @@ const closeCategoryModal = () => {
                     borderLeft: `4px solid ${category.hex_code}`,
                   }"
                 >
-                  <span class="font-medium">
-                    {{ category.name }}
-                  </span>
+                  <span class="font-medium">{{ category.name }}</span>
                 </div>
               </div>
-
-              <!-- Modal Footer with Cancel Button -->
               <div
                 class="p-4 border-t border-gray-200 dark-theme:border-gray-700 flex justify-end"
               >
@@ -281,7 +282,6 @@ const closeCategoryModal = () => {
           </div>
         </transition>
 
-        <!-- Save Button -->
         <button
           type="button"
           class="home-page-button mt-4"
@@ -316,17 +316,6 @@ const closeCategoryModal = () => {
           Save
         </button>
       </form>
-    </div>
-
-    <div
-      v-if="optimisticMessage"
-      class="fixed inset-x-0 bottom-[20%] flex justify-center z-[1000]"
-    >
-      <p
-        class="text-[#73d622] text-xl md:text-2xl font-bold px-8 py-4 rounded-lg border border-transparent animate-[fadeOut_2s_ease-in-out_forwards] dark-theme:bg-black dark-theme:text-[#8aff33] dark-theme:shadow-lg dark-theme:border-[#73d622]/30"
-      >
-        {{ optimisticMessage }}
-      </p>
     </div>
   </div>
 </template>
@@ -369,11 +358,43 @@ const closeCategoryModal = () => {
   width: 100%;
 }
 
-/* ... existing form input styles ... */
-
 @media (min-width: 768px) {
   .responsive-form {
     padding: 1.5rem;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.optimistic-message {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.optimistic-message.success {
+  color: #86d021;
+}
+
+.theme-dark .optimistic-message.success {
+  color: #86d021;
+}
+
+.optimistic-message.error {
+  background-color: #fff5f5;
+  color: #a94442;
+}
+
+.dark-theme .optimistic-message.error {
+  background-color: #4a1c1c;
+  color: #ff6b6b;
 }
 </style>
